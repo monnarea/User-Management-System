@@ -62,10 +62,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto searchUserByName(String name) {
-        return userDao.findAll().stream()
+        User user = userDao.findAll().stream()
                 .filter(u -> u.getName().toLowerCase().equals(name.toLowerCase()))
                 .findFirst()
-                .map(userMapper::fromUserToUserResponseDto)
                 .orElseThrow(() -> new RuntimeException("User not found with Name: " + name));
+        userDao.searchByName(user);
+        return userMapper.fromUserToUserResponseDto(user);
     }
 }
